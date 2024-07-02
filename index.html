@@ -1,0 +1,125 @@
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Lab</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, serif;
+    }
+    div.green {
+      color:pink;
+    }
+    p{
+      font-size: 35;
+      color:red;
+    }
+    p1{
+      font-size: 35;
+      color:green;
+    }
+    p2{
+      font-size: 19;
+      color:red;
+    }
+    h1 {
+      font-size: 45;
+      color: saddlebrown;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <h1 id="main-header">Refleksomierzacz</h1>
+  <p>Liczba prób</p>
+
+  <input type="text" id="myTextField"  value="5">
+  <p><button type="button" onclick="startGame()">START </button></p>
+
+  <p><button  type="button" onclick="calculateTime()" id="reflexButton">Kliknij mnie</button></p>
+  <p1>Panel statystyk</p1>
+
+  <div id="myDIV">
+    <ol>
+      <li >najkrótszy czas reakcji:<p2 id="bestResult"></p2></li>
+
+      <li >najdłuższy czas reakcji:<p2 id="lastResult"></p2></li>
+      <li>średni czas reakcji:<p2 id="averageResult"></p2></li>
+    </ol>
+  </div>
+
+</div>
+
+<script>
+
+  // szukanie po identyfikatorze
+  const header = document.getElementById('main-header');
+  let bestResult=0;
+  let lastResult=0;
+  let averageResult=0;
+  let T1;
+  let T2;
+  function ChangeColor()
+  {
+    const button = document.getElementById("myButton");
+    button.style.backgroundColor = "red";
+    setTimeout(() => {
+      button.style.backgroundColor = "green";
+    }, 6000);
+    setTimeout(() => {
+      button.style.backgroundColor = "yellow";
+    }, 7);
+  }
+
+  function startGame(){
+
+    const button = document.getElementById("myButton");
+    document.getElementById("bestResult").innerHTML = bestResult;
+    document.getElementById("lastResult").innerHTML = lastResult;
+    document.getElementById("averageResult").innerHTML = averageResult;
+    setTimeout(timeCounter(),2000);
+
+  }
+  function timeCounter(){
+    const button = document.getElementById("reflexButton");
+    button.style.backgroundColor = "green";
+    const now = new Date()
+    T1 = now.getTime()/1000;
+  }
+
+  function calculateTime(){
+    const button = document.getElementById("reflexButton");
+    button.style.backgroundColor = "red";
+    const now = new Date()
+    T2 = now.getTime()/1000;
+    alert(T2-T1);
+  }
+
+  document.getElementById('app').append(div); // jest też prepend
+
+  document.querySelector("#app ol li:last-child").after(listItem); // jest też before
+  // document.querySelectorAll("#app .boring").forEach((e) => e.remove());
+
+  function myFunction() {
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  }
+
+
+
+  function readValues(){
+    const odczyt = document.getElementById('myTextField');
+    const checkbox = document.getElementById('myCheckbox');
+
+    if(checkbox.checked) {alert(odczyt.value)}
+  }
+
+
+</script>
+</body>
+</html>
