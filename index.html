@@ -43,7 +43,7 @@
   <p>Liczba prób</p>
 
   <input type="text" id="attemptsValue"  value="5">
-  <p><button type="button" onclick="startGame()" id="startButton" style="background-color:green" >START</p3></button></p>
+  <p><button type="button" onclick="startStopButton()" id="startStopButton" style="background-color:green" >START</p3></button></p>
 
 
   <p><button  type="button" onclick="calculateTime()" id="reflexButton"><h2>Kliknij START aby zacząć</h2></button></p>
@@ -55,6 +55,7 @@
 
       <li >najdłuższy czas reakcji:<p2 id="lastResult"></p2></li>
       <li>średni czas reakcji:<p2 id="averageResult"></p2></li>
+      <li>liczba kliknięć przed zmianą koloru:<p2 id="clicks"></p2></li>
     </ol>
   </div>
 
@@ -72,10 +73,11 @@
   let attemptValue = 0 //liczb prób określona przez użytkownika, standardowo 5 prób
   let attempt=1
   let sum=0;
-
-
-
-  //document.getElementById("startStop").innerHTML = actual;
+  let myTimeout;
+  let clicks=0;
+  const startStop = document.getElementById("startStopButton");
+  const button = document.getElementById("reflexButton");
+  var statistic = document.getElementById("myDIV");
   function ChangeColor()
   {
     const button = document.getElementById("myButton");
@@ -87,59 +89,68 @@
       button.style.backgroundColor = "yellow";
     }, 7);
   }
-  //document.getElementById("startButton").innerHTML=
-        //  "New Button Text using innerHTML";
 
 
-  function startGame(){
-    if(document.getElementById("startButton").innerHTML=="STOP"){ //jeśli STOP
-      document.getElementById("startButton").innerHTML= "START";
-      document.getElementById("startButton").style.backgroundColor = "green";
+  function startStopButton(){
+     if(startStop.innerHTML=="START"){ //jeśli wciśniety przycisk START
+       console.log("STATRT")
+      startGame();
+    }
+    else if(startStop.innerHTML=="STOP"){ //jeśli STOP
+       console.log("STOP")
       stopGame();
     }
-    else if(document.getElementById("startButton").innerHTML=="START"){ //jeśli wciśniety przycisk START
-      document.getElementById("reflexButton").innerHTML= "<h2>Kliknij mnie gdy ZIELONE</h2>";
-      attemptValue = document.getElementById("attemptsValue").value;
-      console.log(attempt);
-      document.getElementById("startButton").innerHTML= "STOP";
-      document.getElementById("startButton").style.backgroundColor = "red";
-    }
-    document.getElementById("averageResult").innerHTML = averageResult;
     const button = document.getElementById("myButton");
     console.log(attempt);
-    setTimeout(()=>timeCounter(),2000);
+    myTimeout = setTimeout(()=>timeCounter(),2000);
   }
-
+  function startGame(){
+    statistic.style.display = "none"; //schowaj statystyki
+    document.getElementById("reflexButton").innerHTML= "<h2>Kliknij mnie gdy ZIELONE</h2>";
+    attemptValue = document.getElementById("attemptsValue").value;
+    console.log(attempt);
+    startStop.innerHTML= "STOP"; //zmien na przeciwny
+    startStop.style.backgroundColor = "red";
+  }
   function stopGame(){
-    document.getElementById("startButton").innerHTML= "START";
-    document.getElementById("startButton").style.backgroundColor = "green";
+    clearTimeout(myTimeout);
+    //document.getElementById("startStopButton").innerHTML= "START";
+    document.getElementById("startStopButton").style.backgroundColor = "gray";
     document.getElementById("reflexButton").innerHTML= "<h2>KONIEC.Kliknij START by spróbować ponownie</h2>";
+    time = 0; //zerowanie
+    sum = 0;
+    attempt = 0;
+    bestResult=999999999999;
+    lastResult=0;
+    averageResult=0;
+    attemptValue = 0;
   }
   function timeCounter(){
-   const button = document.getElementById("reflexButton");
+    console.log("blad");
     button.innerHTML= "<h2>KLIKNIJ MNIE TERAZ</h2>";
     button.style.backgroundColor = "green"
     const now = new Date()
-    T1 = now.getTime()/1000;
-
+    T1 = now.getTime()/1000; // punkt "0" do odliczania czasu
   }
 
   function calculateTime(){
+    statistic.style.display = "block"; //wyswietl statysyki po pierwszej próbie
     console.log(attempt);
-    if(document.getElementById("reflexButton").style.backgroundColor=="green"){
-    const button = document.getElementById("reflexButton");
-    button.style.backgroundColor = "yellow";
+    if(button.style.backgroundColor=="yellow")clicks++;
+    if(button.style.backgroundColor=="green"){
+    button.style.backgroundColor = "yellow"; // kolor żólty, bo będą następne próby
     button.innerHTML= "<h2>Kliknij mnie gdy ZIELONE</h2>";
     const now = new Date()
     T2 = now.getTime()/1000;
     let time=T2-T1;
     if(time<=bestResult)bestResult=time;
     if(time>lastResult)lastResult=time;
-      sum=sum+time;
+      sum=sum+time; //suma kolejnych czasów.
       averageResult=sum/(attempt);
     document.getElementById("bestResult").innerHTML = bestResult;
     document.getElementById("lastResult").innerHTML = lastResult;
-      document.getElementById("averageResult").innerHTML = averageResult;
+    document.getElementById("averageResult").innerHTML = averageResult;
+    document.getElementById("clicks").innerHTML = clicks;
     attempt++;
 
       if(attempt<=attemptValue){
@@ -150,12 +161,12 @@
 
   }}
 
-  function myFunction() {
-    var x = document.getElementById("myDIV");
+  function hideStatistic() {
+    var statistic = document.getElementById("myDIV");
     if (x.style.display === "none") {
       x.style.display = "block";
     } else {
-      x.style.display = "none";
+      statistic.style.display = "none";
     }
   }
 
