@@ -40,16 +40,17 @@
 <body>
 <div id="app">
   <h1 id="main-header">Refleksomierzacz</h1>
-  <p>Liczba prób</p>
+  <p>Liczba prób:</p>
 
   <input type="text" id="attemptsValue"  value="5">
-  <p><button type="button" onclick="startStopButton()" id="startStopButton" style="background-color:green" >START</p3></button></p>
+  <p><button type="button" onclick="startStopButton()" id="sSButton" style="background-color:green" >START</p3></button></p>
 
 
   <p><button  type="button" onclick="calculateTime()" id="reflexButton"><h2>Kliknij START aby zacząć</h2></button></p>
-  <p1>Panel statystyk</p1>
+
 
   <div id="myDIV">
+    <p1>Panel statystyk:</p1>
     <ol>
       <li >najkrótszy czas reakcji:<p2 id="bestResult"></p2></li>
 
@@ -62,8 +63,6 @@
 </div>
 
 <script>
-
-  const header = document.getElementById('main-header');
   let bestResult=999999999999;
   let lastResult=0;
   let averageResult=0;
@@ -75,17 +74,15 @@
   let myTimeout;
   let clicks=0;
   let randomNumberBetwen0And1 = Math.random();
-  const startStop = document.getElementById("startStopButton");
+  const startStop = document.getElementById("sSButton");
   const button = document.getElementById("reflexButton");
   var statistic = document.getElementById("myDIV");
   statistic.style.display = "none"; //schowaj statystyki do pierwszej próby
-
   function startStopButton(){
      if(startStop.innerHTML=="START"){ //jeśli wciśniety przycisk START
       startGame();
     }
     else if(startStop.innerHTML=="STOP"){ //jeśli STOP
-       console.log("STOP")
       stopGame();
     }
   }
@@ -94,12 +91,11 @@
     button.style.backgroundColor = "yellow";
     button.innerHTML= "<h2>Kliknij mnie gdy ZIELONE</h2>";
     attemptValue = document.getElementById("attemptsValue").value;
-    console.log(attempt);
     startStop.innerHTML= "STOP"; //zmien na przeciwny
     startStop.style.backgroundColor = "red";
-    randomNumberBetwen0And1 = Math.random()*5000;
-    console.log(randomNumberBetwen0And1)
-    myTimeout = setTimeout(()=>timeCounter(),randomNumberBetwen0And1);
+    randomNumberBetwen0And1 = (Math.random()*4000)+1000;
+    console.log(randomNumberBetwen0And1);  //do testow
+    myTimeout = setTimeout(()=>timeCounter(1),randomNumberBetwen0And1);
   }
   function stopGame(){
     clearTimeout(myTimeout);
@@ -116,7 +112,8 @@
     attemptValue = 0;
     clicks=0;
   }
-  function timeCounter(){
+  function timeCounter(a=0){
+    console.log(a);
     button.innerHTML= "<h2>KLIKNIJ MNIE TERAZ</h2>";
     button.style.backgroundColor = "green"
     const now = new Date()
@@ -124,9 +121,9 @@
   }
 
   function calculateTime(){
-    statistic.style.display = "block"; //wyswietl statysyki po pierwszej próbie
     if(button.style.backgroundColor=="yellow")clicks++;
     if(button.style.backgroundColor=="green"){
+      statistic.style.display = "block"; //wyswietl statysyki po pierwszej próbie
     button.style.backgroundColor = "yellow"; // kolor żólty, bo będą następne próby
     button.innerHTML= "<h2>Kliknij mnie gdy ZIELONE</h2>";
     const now = new Date()
@@ -135,16 +132,18 @@
     if(time<=bestResult)bestResult=time;
     if(time>lastResult)lastResult=time;
       sum=sum+time; //suma kolejnych czasów.
+      attempt++;
       averageResult=sum/(attempt);
     document.getElementById("bestResult").innerHTML = bestResult;
     document.getElementById("lastResult").innerHTML = lastResult;
     document.getElementById("averageResult").innerHTML = averageResult;
     document.getElementById("clicks").innerHTML = clicks;
-    attempt++;
+
 
       if(attempt<attemptValue){
-        randomNumberBetwen0And1 = Math.random()*5000;
-        setTimeout(()=>timeCounter(),randomNumberBetwen0And1);
+        randomNumberBetwen0And1 = (Math.random()*4000)+1000;
+        console.log(randomNumberBetwen0And1); //do testow
+        myTimeout = setTimeout(()=>timeCounter(1),randomNumberBetwen0And1);
       }
       else stopGame();
   }}
