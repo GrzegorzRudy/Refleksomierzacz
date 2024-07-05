@@ -26,7 +26,15 @@
     h1 {
       font-size: 45;
       color: saddlebrown;
+
     }
+    h2 {
+      font-size: 50;
+    }
+    start{
+      font-size: 25;
+    }
+
   </style>
 </head>
 <body>
@@ -35,9 +43,10 @@
   <p>Liczba prób</p>
 
   <input type="text" id="myTextField"  value="5">
-  <p><button type="button" onclick="startGame()">START </button></p>
+  <p><button type="button" onclick="startGame()" id="startButton" style="background-color:green" >START</p3></button></p>
 
-  <p><button  type="button" onclick="calculateTime()" id="reflexButton">Kliknij mnie</button></p>
+
+  <p><button  type="button" onclick="calculateTime()" id="reflexButton"><h2>Kliknij mnie</h2></button></p>
   <p1>Panel statystyk</p1>
 
   <div id="myDIV">
@@ -55,11 +64,15 @@
 
   // szukanie po identyfikatorze
   const header = document.getElementById('main-header');
-  let bestResult=0;
-  let lastResult=0;
-  let averageResult=0;
+  let bestResult;
+  let lastResult;
+  let averageResult;
   let T1;
   let T2;
+  let attempts = 3;
+  let actual;//="start";
+
+  //document.getElementById("startStop").innerHTML = actual;
   function ChangeColor()
   {
     const button = document.getElementById("myButton");
@@ -71,18 +84,33 @@
       button.style.backgroundColor = "yellow";
     }, 7);
   }
+  //document.getElementById("startButton").innerHTML=
+        //  "New Button Text using innerHTML";
+
 
   function startGame(){
+    if(document.getElementById("startButton").innerHTML=="STOP"){
+      document.getElementById("startButton").innerHTML= "START";
+      document.getElementById("startButton").style.backgroundColor = "green";
+    }
+    else if(document.getElementById("startButton").innerHTML=="START"){
+      document.getElementById("startButton").innerHTML= "STOP";
+      document.getElementById("startButton").style.backgroundColor = "red";
+    }
 
-    const button = document.getElementById("myButton");
     document.getElementById("bestResult").innerHTML = bestResult;
     document.getElementById("lastResult").innerHTML = lastResult;
     document.getElementById("averageResult").innerHTML = averageResult;
-    setTimeout(timeCounter(),2000);
+    const button = document.getElementById("myButton");
+    timeCounter();
+
+  }
+  function stopGame(){
 
   }
   function timeCounter(){
-    const button = document.getElementById("reflexButton");
+    console.log("timeCounter");
+   const button = document.getElementById("reflexButton");
     button.style.backgroundColor = "green";
     const now = new Date()
     T1 = now.getTime()/1000;
@@ -90,16 +118,11 @@
 
   function calculateTime(){
     const button = document.getElementById("reflexButton");
-    button.style.backgroundColor = "red";
+    button.style.backgroundColor = "yellow";
     const now = new Date()
     T2 = now.getTime()/1000;
-    alert(T2-T1);
+    bestResult=T2-T1;
   }
-
-  document.getElementById('app').append(div); // jest też prepend
-
-  document.querySelector("#app ol li:last-child").after(listItem); // jest też before
-  // document.querySelectorAll("#app .boring").forEach((e) => e.remove());
 
   function myFunction() {
     var x = document.getElementById("myDIV");
@@ -110,15 +133,12 @@
     }
   }
 
-
-
   function readValues(){
     const odczyt = document.getElementById('myTextField');
     const checkbox = document.getElementById('myCheckbox');
 
     if(checkbox.checked) {alert(odczyt.value)}
   }
-
 
 </script>
 </body>
