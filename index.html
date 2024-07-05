@@ -63,7 +63,6 @@
 
 <script>
 
-  // szukanie po identyfikatorze
   const header = document.getElementById('main-header');
   let bestResult=999999999999;
   let lastResult=0;
@@ -71,52 +70,43 @@
   let T1;
   let T2;
   let attemptValue = 0 //liczb prób określona przez użytkownika, standardowo 5 prób
-  let attempt=1
+  let attempt=0
   let sum=0;
   let myTimeout;
   let clicks=0;
+  let randomNumberBetwen0And1 = Math.random();
   const startStop = document.getElementById("startStopButton");
   const button = document.getElementById("reflexButton");
   var statistic = document.getElementById("myDIV");
-  function ChangeColor()
-  {
-    const button = document.getElementById("myButton");
-    button.style.backgroundColor = "red";
-    setTimeout(() => {
-      button.style.backgroundColor = "green";
-    }, 6000);
-    setTimeout(() => {
-      button.style.backgroundColor = "yellow";
-    }, 7);
-  }
-
+  statistic.style.display = "none"; //schowaj statystyki do pierwszej próby
 
   function startStopButton(){
      if(startStop.innerHTML=="START"){ //jeśli wciśniety przycisk START
-       console.log("STATRT")
       startGame();
     }
     else if(startStop.innerHTML=="STOP"){ //jeśli STOP
        console.log("STOP")
       stopGame();
     }
-    const button = document.getElementById("myButton");
-    console.log(attempt);
-    myTimeout = setTimeout(()=>timeCounter(),2000);
   }
   function startGame(){
     statistic.style.display = "none"; //schowaj statystyki
-    document.getElementById("reflexButton").innerHTML= "<h2>Kliknij mnie gdy ZIELONE</h2>";
+    button.style.backgroundColor = "yellow";
+    button.innerHTML= "<h2>Kliknij mnie gdy ZIELONE</h2>";
     attemptValue = document.getElementById("attemptsValue").value;
     console.log(attempt);
     startStop.innerHTML= "STOP"; //zmien na przeciwny
     startStop.style.backgroundColor = "red";
+    randomNumberBetwen0And1 = Math.random()*5000;
+    console.log(randomNumberBetwen0And1)
+    myTimeout = setTimeout(()=>timeCounter(),randomNumberBetwen0And1);
   }
   function stopGame(){
     clearTimeout(myTimeout);
-    //document.getElementById("startStopButton").innerHTML= "START";
-    document.getElementById("startStopButton").style.backgroundColor = "gray";
-    document.getElementById("reflexButton").innerHTML= "<h2>KONIEC.Kliknij START by spróbować ponownie</h2>";
+    startStop.innerHTML= "START";
+    startStop.style.backgroundColor = "green";
+    button.innerHTML= "<h2>KONIEC.Kliknij START by spróbować ponownie</h2>";
+    button.style.backgroundColor = "gray";
     time = 0; //zerowanie
     sum = 0;
     attempt = 0;
@@ -124,9 +114,9 @@
     lastResult=0;
     averageResult=0;
     attemptValue = 0;
+    clicks=0;
   }
   function timeCounter(){
-    console.log("blad");
     button.innerHTML= "<h2>KLIKNIJ MNIE TERAZ</h2>";
     button.style.backgroundColor = "green"
     const now = new Date()
@@ -135,7 +125,6 @@
 
   function calculateTime(){
     statistic.style.display = "block"; //wyswietl statysyki po pierwszej próbie
-    console.log(attempt);
     if(button.style.backgroundColor=="yellow")clicks++;
     if(button.style.backgroundColor=="green"){
     button.style.backgroundColor = "yellow"; // kolor żólty, bo będą następne próby
@@ -153,32 +142,12 @@
     document.getElementById("clicks").innerHTML = clicks;
     attempt++;
 
-      if(attempt<=attemptValue){
-        setTimeout(()=>timeCounter(),1000);
-        console.log(attempt);
+      if(attempt<attemptValue){
+        randomNumberBetwen0And1 = Math.random()*5000;
+        setTimeout(()=>timeCounter(),randomNumberBetwen0And1);
       }
       else stopGame();
-
   }}
-
-  function hideStatistic() {
-    var statistic = document.getElementById("myDIV");
-    if (x.style.display === "none") {
-      x.style.display = "block";
-    } else {
-      statistic.style.display = "none";
-    }
-  }
-
-  function readValues(){
-    const odczyt = document.getElementById('myTextField');
-    const checkbox = document.getElementById('myCheckbox');
-
-    if(checkbox.checked) {alert(odczyt.value)}
-
-
-
-  }
 
 </script>
 </body>
